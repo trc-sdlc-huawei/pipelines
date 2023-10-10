@@ -1,40 +1,53 @@
-# More examples of Codefresh YAML can be found at
-# https://codefresh.io/docs/docs/yaml-examples/examples/
-
 version: "1.0"
-# Stages can help you organize your steps in stages
 stages:
   - "clone"
-  - "build"
   - "test"
+  - "build"
 
 steps:
   clone:
     title: "Cloning repository"
     type: "git-clone"
-    repo: "trc-sdlc-huawei/rollouts-demo"
-    # CF_BRANCH value is auto set when pipeline is triggered
-    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+    stage: "clone"
+    repo: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
     revision: "${{CF_BRANCH}}"
     git: "github"
-    stage: "clone"
 
   test:
     title: Executing tests
     type: freestyle
-    working_directory: '${{clone}}'
+    stage: "test"
+    working_directory: "${{clone}}"
     arguments:
-      image: 'alpine'
+      image: "alpine"
       commands:
         - echo "Executing tests"
 
   build:
     title: "Building Docker image"
     type: "build"
-    image_name: "rollouts-demo/test"
+    stage: "build"
+    image_name: "${{CF_REPO_NAME}}"
     working_directory: "${{clone}}"
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: "Dockerfile"
+
+  jira-issue-extractor:
+    title: Enrich image with annotations
+    type: jira-issue-extractor
     stage: "build"
+    arguments:
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED}}"
+      JIRA_PROJECT_PREFIX: "SDLC"
+      MESSAGE: "${{CF_BRANCH}}"
+      JIRA_CONTEXT: jira
 
-
+  enrich-image:
+    title: Enrich image with annotations
+    type: image-enricher
+    stage: "build"
+    arguments:
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED}}"
+      BRANCH: '${{CF_BRANCH}}'
+      REPO: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+      GIT_PROVIDER_NAME: github
