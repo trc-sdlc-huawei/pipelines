@@ -60,7 +60,7 @@ steps:
       commands:
         - git status
         - "cat basic/${{CF_REPO_NAME}}/deployment.yaml"
-        - "sed -i 's|image: .*|image: swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}|' basic/${{CF_REPO_NAME}}/deployment.yaml"
+        - "sed -i 's|image: .*|image: swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}-1|' basic/${{CF_REPO_NAME}}/deployment.yaml"
         - "cat basic/${{CF_REPO_NAME}}/deployment.yaml"
         - "git config --global user.email bot@huawei.com"
         - "git config --global user.email bot"
