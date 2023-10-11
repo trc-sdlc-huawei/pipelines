@@ -65,6 +65,6 @@ steps:
         - "git config --global user.email bot@huawei.com"
         - "git config --global user.email bot"
         - "git add ."
-        - "git commit 'deploy new version ${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}'"
+        - 'git "commit deploy new version ${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"'
         - "git push https://${{GIT_USER}}:${{GIT_TOKEN}}@github.com/${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}.git"
 
