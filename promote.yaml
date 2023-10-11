@@ -1,37 +1,37 @@
 version: "1.0"
 stages:
-  # - "promote"
+  - "promote"
   - "deploy"
 
 steps:
-  # push:
-  #   type: push
-  #   stage: "promote"
-  #   arguments:
-  #     candidate: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-dev/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
-  #     tag: ${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}
-  #     image_name: "${{CF_REPO_NAME}}"
-  #     registry: prod
+  push:
+    type: push
+    stage: "promote"
+    arguments:
+      candidate: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-dev/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
+      tag: ${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}
+      image_name: "${{CF_REPO_NAME}}"
+      registry: prod
 
-  # jira-issue-extractor:
-  #   title: Enrich image with annotations
-  #   type: jira-issue-extractor
-  #   stage: "promote"
-  #   arguments:
-  #     IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"
-  #     JIRA_PROJECT_PREFIX: "SDLC"
-  #     MESSAGE: "${{CF_BRANCH}}"
-  #     JIRA_CONTEXT: jira
+  jira-issue-extractor:
+    title: Enrich image with annotations
+    type: jira-issue-extractor
+    stage: "promote"
+    arguments:
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"
+      JIRA_PROJECT_PREFIX: "SDLC"
+      MESSAGE: "${{CF_BRANCH}}"
+      JIRA_CONTEXT: jira
 
-  # enrich-image:
-  #   title: Enrich image with annotations
-  #   type: image-enricher
-  #   stage: "promote"
-  #   arguments:
-  #     IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"
-  #     BRANCH: '${{CF_BRANCH}}'
-  #     REPO: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
-  #     GIT_PROVIDER_NAME: github
+  enrich-image:
+    title: Enrich image with annotations
+    type: image-enricher
+    stage: "promote"
+    arguments:
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-prod/${{CF_REPO_NAME}}:${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"
+      BRANCH: '${{CF_BRANCH}}'
+      REPO: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+      GIT_PROVIDER_NAME: github
 
   clone-gitops:
     title: "Cloning GitOps repository"
@@ -59,5 +59,5 @@ steps:
         - 'git commit -m "deploy new version ${{CF_PULL_REQUEST_TARGET}}-${{CF_SHORT_REVISION}}"'
         - "git status"
         - "git pull"
-        - "git push https://${{GIT_USER}}:${{GIT_TOKEN}}@github.com/${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}.git" --force
+        - "git push https://${{GIT_USER}}:${{GIT_TOKEN}}@github.com/${{CF_REPO_OWNER}}/gitops.git"
 
