@@ -37,7 +37,7 @@ steps:
     type: jira-issue-extractor
     stage: "build"
     arguments:
-      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-dev/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
       JIRA_PROJECT_PREFIX: "SDLC"
       MESSAGE: "${{CF_BRANCH}}"
       JIRA_CONTEXT: jira
@@ -47,7 +47,7 @@ steps:
     type: image-enricher
     stage: "build"
     arguments:
-      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
+      IMAGE: "swr.tr-west-1.myhuaweicloud.com/trc-sdlc-dev/${{CF_REPO_NAME}}:${{CF_BRANCH_TAG_NORMALIZED_LOWER_CASE}}"
       BRANCH: '${{CF_BRANCH}}'
       REPO: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
       GIT_PROVIDER_NAME: github
