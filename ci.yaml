@@ -22,6 +22,7 @@ steps:
       image: "alpine"
       commands:
         - echo "Executing tests"
+        - cf_export PARAMETER_1=val
 
   build:
     title: "Building Docker image"
